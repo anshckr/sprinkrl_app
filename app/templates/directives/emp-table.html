@@ -1,0 +1,27 @@
+<div class="row" ng-repeat="i in rows track by $index">
+<div class='col-sm-4 area{{$index+1}}' ng-repeat="j in _.range(0,3) track by $index">
+    <div class="row">
+        <div class="col-sm-offset-4 col-sm-2 employee_cont">
+            <div class="employee">
+            </div>
+        </div>
+        <div class="col-sm-2 employee_cont">
+            <div class="employee">
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-3 col-sm-6 table{{i+2*j}}">Table {{i+2*j}}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-4 col-sm-2 employee_cont">
+          <div class="employee">
+        </div>
+        </div>
+        <div class="col-sm-2 employee_cont">
+          <div class="employee">
+        </div>
+        </div>
+    </div>
+</div>
+</div>

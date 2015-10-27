@@ -11,5 +11,12 @@
     "angular-loader": "~1.4.0",
     "angular-mocks": "~1.4.0",
     "html5-boilerplate": "~5.2.0"
+  },
+  "devDependencies": {
+    "bootstrap": "~3.3.5",
+    "jquery-ui": "~1.11.4",
+    "ngDraggable": "~0.1.8",
+    "underscore": "~1.8.3",
+    "markdown-js": "~0.6.2"
   }
 }
