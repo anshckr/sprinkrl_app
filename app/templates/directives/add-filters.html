@@ -1,0 +1,12 @@
+<div class="render_filters">
+    <div class="teams">
+        <label ng-repeat="i in employeeTeams track by $index">
+            <input type="checkbox" rel="i" /> {{i}}
+        </label>
+    </div>
+    <div class="designations">
+        <label ng-repeat="j in employeeDesignations track by $index">
+            <input type="checkbox" rel="j" /> {{j}}
+        </label>
+    </div>
+</div>

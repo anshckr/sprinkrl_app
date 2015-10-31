@@ -1,0 +1,102 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+.main_container {
+  border: 1px solid black
+}
+
+.team_area {
+  height: 240px;
+  margin: 30px 0px;
+}
+
+.team_table {
+  background-color: #D3D3D3;
+  height: 140px;
+  text-align: center;
+}
+.employee, .employee_cont {
+  height: 20px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: #D3D3D3;
+}
+
+span.title {
+    display: block;
+    position: absolute;
+    top: 42%;
+    left: 40%;
+    height: 20px;
+}
+
+.employee_cont {
+  background-color: lightgreen
+}
+.isFilled {
+  background-color: red
+}
+
+li {
+  list-style-type: none;
+  display: inline-block;
+  margin: 10px;
+}
+#alert-area {
+  text-align: center;
+}
+.searched{
+  background-color: blue !important
+}
+.search-name {
+  width: 305px !important;
+  margin-top: 10px;
+  float: right;
+}
+.show_filters{
+  margin-top: 10px
+}
+.add_filters {
+  position: absolute;
+  width: 215px;
+  border: 1px solid black;
+}
+.render_filters {
+  position: relative;
+  z-index: 1000;
+}
+
+.render_filters div {
+  border-top: 1px solid black 
+}
+.add_filters label {
+  padding: 10px;
+}

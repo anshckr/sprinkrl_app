@@ -1,0 +1,40 @@
+<div class="container main_container">
+    <div class="row filters">
+        <div class="col-md-offset-8 col-md-1 other_filter">
+            <button type="button" class="btn btn-md show_filters"><i class="fa fa-filter"></i></button>
+            <div class="hide add_filters">
+              <label>
+                  <input name='teams' type="checkbox" rel="Teams" />
+                  Teams
+              </label>
+              <label>
+                  <input name='designations' type="checkbox" rel="Designations" />
+                  Designations
+              </label>
+              <div class="render_filters">
+                <div class="teams hide">
+                    <label ng-repeat="i in employeeTeams track by $index">
+                        <input type="checkbox" rel="{{i}}" ng-model="teamFilter[i]" ng-true-value="'{{i}}'" ng-false-value="''"/> {{i}}
+                    </label>
+                </div>
+                <div class="designations hide">
+                    <label ng-repeat="i in employeeDesignations track by $index">
+                        <input type="checkbox" rel="{{i}}" ng-model="designationFilter[i]" ng-true-value="'{{i}}'" ng-false-value="''"/> {{i}}
+                    </label>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-3 name_filter">
+            <input name='name' type="text" class="form-control search-name" ng-model="nameFilter" placeholder="Search..." />
+        </div>
+    </div>
+    <div class="unseated_emp">
+        <h4> Unseated Employees </h4>
+        <li ng-repeat="employee in employeeList track by $index">
+            <div class="employee" dd-draggable="true" emp-name="{{employee.name}}" data-obj="{{employee}}" data-toggle="popover" data-content="{{employee}}" data-placement="bottom"></div>
+        </li>
+    </div>
+    <emp-table></emp-table>
+    <div id="alert-area"></div>
+</div>

@@ -1,25 +1,29 @@
 <div class="row" ng-repeat="i in rows track by $index">
-<div class='col-sm-4 area{{$index+1}}' ng-repeat="j in _.range(0,3) track by $index">
+<div class='col-sm-4 team_area' ng-repeat="j in _.range(0,3) track by $index">
     <div class="row">
-        <div class="col-sm-offset-4 col-sm-2 employee_cont">
-            <div class="employee">
+        <div class="col-sm-offset-4 col-sm-2">
+            <div class="employee_cont" dd-drop-target="true">
             </div>
         </div>
-        <div class="col-sm-2 employee_cont">
-            <div class="employee">
-        </div>
+        <div class="col-sm-2">
+            <div class="employee_cont" dd-drop-target="true">
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-offset-3 col-sm-6 table{{i+2*j}}">Table {{i+2*j}}</div>
+        <div class="col-sm-offset-3 col-sm-6 team_table">
+            <span class="title">
+                Table {{i+2*j}}
+            </span>
+        </div>
     </div>
     <div class="row">
-        <div class="col-sm-offset-4 col-sm-2 employee_cont">
-          <div class="employee">
+        <div class="col-sm-offset-4 col-sm-2">
+            <div class="employee_cont" dd-drop-target="true">
+            </div>
         </div>
-        </div>
-        <div class="col-sm-2 employee_cont">
-          <div class="employee">
+        <div class="col-sm-2">
+            <div class=" employee_cont" dd-drop-target="true">
         </div>
         </div>
     </div>
