@@ -10,8 +10,6 @@ angular.module('myApp')
     },
     controller: function ($scope) {
     },
-    replace: true,
-    link: function (scope, element, attr) {
-    }
+    replace: true
   };
 }]);

@@ -16,12 +16,17 @@ angular.module('myApp.main', [
   'MainService',
   function($scope, $window, $timeout, MainService) {
     MainService.on('value', function(snapshot) {
+      /* variables */
       $scope.employeeList = snapshot.val();
       $scope.employeeTeams = _.uniq(_.pluck($scope.employeeList, 'team'));
       $scope.employeeDesignations = _.uniq(_.pluck($scope.employeeList, 'designation'));
+      $scope.teamFilter = {};
+      $scope.designationFilter = {};
+      
       if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
           $scope.$digest();
       }
+      
       $timeout(function() {
         /* set employees popover content */
         var popovers_ele = $('.employee[data-toggle="popover"]');
@@ -38,41 +43,58 @@ angular.module('myApp.main', [
           popover.$tip.addClass(popover.options.placement);
         });
 
-        $('input[name="teams"]').on('change', function(e) {
-          if(!$(e.currentTarget).is(":checked")){
-            $scope.clearTeamChecks();
-            $('.teams').addClass('hide');
-          } else {
-            $('.teams').removeClass('hide');
-          }
-          $scope.highlight();
+        /* events binded to side filters i.e. teams and designations */
+        $('input[name="teams"], input[name="designations"]').on('change', function(e) {
+          $scope.applySideFilters($(e.currentTarget));
         });
-        $('input[name="designations"]').on('change', function(e) {
-          if(!$(e.currentTarget).is(":checked")){
-            $scope.clearDesignationChecks();
-            $('.designations').addClass('hide');
-          } else {
-            $('.designations').removeClass('hide');
-          }
-          $scope.highlight();
-        });
-        /* call hightlight if any of the filters is changed */
+        
+        /* call hightlight if any of the actual filter value is checked */
         $('input.search-name, .teams input, .designations input').on('change', function(e) {
           $scope.highlight();
         });
       }, 0);
     });
+
+    /**
+     * [applySideFilters show/hide and applies the checked values in side filters]
+     * @param  {DOM Element} ele element which was checked
+     */
+    $scope.applySideFilters = function(ele) {
+      if(!ele.is(":checked")){
+        $scope.clearTeamChecks();
+        $('.' + ele.attr('name')).addClass('hide');
+      } else {
+        $('.' + ele.attr('name')).removeClass('hide');
+      }
+      $scope.highlight();
+    };
+
+    /**
+     * [showHideFilters function to execute when side filter is clicked]
+     */
     $scope.showHideFilters = function() {
       $('.add_filters').toggleClass('hide');
     };
+
+    /**
+     * [clearTeamChecks clear teams filter]
+     */
     $scope.clearTeamChecks = function() {
       $('.teams').find('input:checked').attr('checked', false);
       $scope.teamFilter = {};
     };
+
+    /**
+     * [clearDesignationChecks clear designations filter]
+     */
     $scope.clearDesignationChecks = function() {
       $('.designations').find('input:checked').attr('checked', false);
       $scope.designationFilter = {};
     };
+
+    /**
+     * [add function used to save an employee to the firebase database]
+     */
     $scope.add = function() {
      var save = MainService.push().set({
         name: $scope.name,
@@ -81,11 +103,16 @@ angular.module('myApp.main', [
         project: $scope.project
      });
 
+     /* reset all the details */
      $scope.name = '';
      $scope.designation = '';
      $scope.team = '';
      $scope.project = '';
     };
+
+    /**
+     * [showHideForm used to show/hide the form to add an employee]
+     */
     $scope.showHideForm = function() {
       var form_ele = $('form');
       if (form_ele.hasClass('hide')){
@@ -97,8 +124,12 @@ angular.module('myApp.main', [
       }
       form_ele.toggleClass('hide');
     };
-    $scope.teamFilter = {};
-    $scope.designationFilter = {};
+
+    /**
+     * [searchFilterName used to filter employee based on name]
+     * @param  {Object} employee
+     * @return {Boolean} true/false based on whether employee's name matches the searched string
+     */
     $scope.searchFilterName = function(employee) {
       if(!$scope.nameFilter) {
         return false;
@@ -106,6 +137,12 @@ angular.module('myApp.main', [
       var keyword = new RegExp($scope.nameFilter, 'i');
       return keyword.test(employee.name);
     };
+
+    /**
+     * [searchFilterTeam used to filter employee based on their teams]
+     * @param  {Object} employee
+     * @return {Boolean} true/false based on whether employee's teams matches the checked team
+     */
     $scope.searchFilterTeam = function(employee) {
       /* return true if matched else false */
       if (_.isEmpty($scope.teamFilter)) {
@@ -124,6 +161,12 @@ angular.module('myApp.main', [
         });
       }
     };
+
+    /**
+     * [searchFilterDesignation used to filter employee based on their desigations]
+     * @param  {Object} employee
+     * @return {Boolean} true/false based on whether employee's designation matches the checked designation
+     */
     $scope.searchFilterDesignation = function(employee) {
       /* return true if matched else false */
       if (_.isEmpty($scope.designationFilter)) {
@@ -142,11 +185,19 @@ angular.module('myApp.main', [
         });
       }
     };
+
+    /**
+     * [highlight highlights the employees who pass the match criteria]
+     */
     $scope.highlight = function() {
       $('.searched').removeClass('searched');
       $scope.filtered_employees = $scope.filterEmployees();
       $scope.highlightSearched($scope.filtered_employees);
     };
+
+    /**
+     * [clearFilters removes all the applied fitlers]
+     */
     $scope.clearFilters = function() {  
       $('.searched').removeClass('searched');
       $('input:checked').attr('checked', false);
@@ -156,6 +207,11 @@ angular.module('myApp.main', [
       $scope.teamFilter = {};
       $scope.designationFilter = {};
     };
+
+    /**
+     * [filterEmployees helper function used to filter employees]
+     * @return {Array} list of employees who passed the search criteria
+     */
     $scope.filterEmployees = function() {
       var arr = [];
       _.each($scope.employeeList, function(employee) {
@@ -165,12 +221,18 @@ angular.module('myApp.main', [
       });
       return arr;
     };
+
+    /**
+     * [highlightSearched helper function used to highlight the above fetched employees]
+     * @param  {Array} arr list of employees to be hightlighted
+     */
     $scope.highlightSearched = function(arr) {
       _.each(arr, function(employee) {
         $('[emp-name=\'' + employee.name + '\']').addClass('searched');
       });
     };
-    // array for seated employees
+
+    /* additional functions to view remaining seated/unseated employees */
     $scope.seated = [];
     $scope.showEmployeesLeft = function() {
       $window.alert($scope.employeeList.length - $scope.seated.length + ' employees left unseated.');
@@ -178,17 +240,26 @@ angular.module('myApp.main', [
     $scope.showEmployeesSeated = function() {
       $window.alert($scope.seated.length + ' employees seated.');
     };
+
+    /**
+     * [moveToBox used while dragging the employee to some seat]
+     * @param  {Object} employee
+     */
     $scope.moveToBox = function(employee) {
       _.each($scope.employeeList, function(emp, index, list) {
         if (emp.name == employee.name) {
           // add to dropped array
           $scope.seated.push(emp);
-          $scope.moved_ele = $('[data-obj=\'' + JSON.stringify(employee) + '\']'); // remove from items array
-          // $scope.employeeList = _.omit(list, index);
+          $scope.moved_ele = $('[data-obj=\'' + JSON.stringify(employee) + '\']');
         }
       });
       $scope.$apply();
     };
+
+    /**
+     * [newAlert displays alert when an employees position is changed]
+     * @param  {String} message text to be displayed in the alert
+     */
     $scope.newAlert = function(message) {
       $('#alert-area').append($('<div class=\'alert-message fade in\' data-alert><p> ' + message + ' </p></div>'));
       $('.alert-message').delay(2000).fadeOut('slow', function() {

@@ -10,8 +10,6 @@ angular.module('myApp')
     controller: function ($scope) {
       $scope.rows = _.range(1,3);
     },
-    replace: true,
-    link: function (scope, element, attr) {
-    }
+    replace: true
   };
 }]);

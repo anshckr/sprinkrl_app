@@ -6,8 +6,6 @@ angular.module('myApp')
     templateUrl: "templates/directives/add-employee.html",
     controller: function ($scope) {
     },
-    replace: true,
-    link: function (scope, element, attr) {
-    }
+    replace: true
   };
 }]);
