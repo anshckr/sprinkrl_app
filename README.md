@@ -1,8 +1,8 @@
-# Spot (Sprinklr+Bot)
+# Spot (Sprinklr+Bot) - An employee position tracking app that allows you to allocate seats to employees, search them via their name, team or designation.
 
 ## Getting Started
 
-To get you started you can simply clone the this project's repository and install the dependencies:
+To get you started you can simply clone this project's repository and install the dependencies:
 
 ### Prerequisites
 
@@ -13,8 +13,8 @@ Here we have used a number of node.js tools to initialize and test the app. You 
 Clone the project's repository using [git][git]:
 
 ```
-git clone https://github.com/anshckr/sprinklr_app.git
-cd sprinklr_app
+git clone https://github.com/anshckr/sprinkrl_app.git
+cd sprinkrl_app
 ```
 
 ### Install Dependencies
@@ -37,7 +37,7 @@ folders in this project.
 * `node_modules` - contains the npm packages for the tools we need to run this app
 * `app/bower_components` - contains the angular framework files
 
-*Note that the `bower_components` folder would normally be installed in the root folder but
+* Note that the `bower_components` folder would normally be installed in the root folder but
 we have changed this location through the `.bowerrc` file.  Putting it in the app folder makes
 it easier to serve the files by a webserver.*
 
@@ -51,7 +51,6 @@ npm start
 ```
 
 Now browse to the app at `http://localhost:8000/app/index.html`.
-
 
 
 ## Directory Layout
@@ -83,7 +82,16 @@ e2e-tests/            --> end-to-end tests
   scenarios.js          --> end-to-end scenarios to be run by Protractor
 ```
 
+## Additional Details
+
+The app internally uses firebase to fetch the list of employess. Initially, no employee is allocated any seat so you need to manually move the employee and allocate position to them.
+
+A button is given to add an employee to the database. Further if you want to remove any employee, you will need to go to the app's firebase database to manually remove them. You will need collaboratation permission to do that. Please send a mail to - anshgm123@gmail.com for the same
+
+
 ## Testing
+
+NOTE: The Test Cases are still failing
 
 There are two kinds of tests in the angular-seed application: Unit tests and End to End tests.
 
@@ -152,7 +160,6 @@ npm run protractor
 This script will execute the end-to-end tests against the application being hosted on the
 development server.
 
-
 ## Updating Angular
 
 As the angular framework library code and tools are acquired through package managers (npm and
@@ -171,35 +178,6 @@ You can update the Angular dependencies by running:
 ```
 bower update
 ```
-
-This will find the latest versions that match the version ranges specified in the `bower.json` file.
-
-```
-npm run update-index-async
-```
-
-This will copy the contents of the `angular-loader.js` library file into the `index-async.html` page.
-You can run this every time you update the version of Angular that you are using.
-
-
-### Running the App during Development
-
-This project comes preconfigured with a local development webserver.  It is a node.js
-tool called [http-server][http-server].  You can start this webserver with `npm start` but you may choose to install the tool globally:
-
-```
-sudo npm install -g http-server
-```
-
-Then you can start your own development web server to serve static files from a folder by
-running:
-
-```
-http-server -a localhost -p 8000
-```
-
-Alternatively, you can choose to configure your own webserver, such as apache or nginx. Just
-configure your server to serve the files under the `app/` directory.
 
 ## Contact
 

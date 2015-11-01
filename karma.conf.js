@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(config){
   config.set({
 
@@ -7,8 +8,9 @@ module.exports = function(config){
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/components/**/*.js',
-      'app/js/**/*.js'
+      'app/js/servuces/*.js',
+      'app/js/**/*.js',
+      'app/test/*.js'
     ],
 
     autoWatch : true,

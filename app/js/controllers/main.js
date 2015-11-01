@@ -1,8 +1,6 @@
 'use strict';
 angular.module('myApp.main', [
-  'ngRoute',
-  'ngDraggable',
-  'firebase'
+  'ngRoute'
 ]).config([
   '$routeProvider',
   function($routeProvider) {
@@ -14,10 +12,9 @@ angular.module('myApp.main', [
 ]).controller('MainCtrl', [
   '$scope',
   '$window',
-  '$firebaseObject',
   '$timeout',
   'MainService',
-  function($scope, $window, $firebaseObject, $timeout, MainService) {
+  function($scope, $window, $timeout, MainService) {
     MainService.on('value', function(snapshot) {
       $scope.employeeList = snapshot.val();
       $scope.employeeTeams = _.uniq(_.pluck($scope.employeeList, 'team'));
