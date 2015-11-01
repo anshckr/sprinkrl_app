@@ -9,8 +9,9 @@ angular.module('myApp')
             element.attr("draggable", true);
  
             element.bind("dragstart", function(eventObject) {
-                $(eventObject.currentTarget).popover('hide');
-                $(eventObject.currentTarget).closest('.employee_cont').removeClass('isFilled');
+                var target_ele = $(eventObject.currentTarget);
+                target_ele.popover('hide');
+                target_ele.closest('.employee_cont').removeClass('isFilled');
                 eventObject.originalEvent.dataTransfer.setData("employee", attributes.obj);
             });
         }

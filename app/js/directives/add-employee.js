@@ -1,14 +1,10 @@
 angular.module('myApp')
-.directive("empTable", ['$timeout', function($timeout) {
+.directive("addEmployee", ['$timeout', function($timeout) {
   'use strict';
   return {
     restrict: "E",
-    templateUrl: "templates/directives/emp-table.html",
-    scope: {
-      rows: '='
-    },
+    templateUrl: "templates/directives/add-employee.html",
     controller: function ($scope) {
-      $scope.rows = _.range(1,3);
     },
     replace: true,
     link: function (scope, element, attr) {

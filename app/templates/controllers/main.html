@@ -1,7 +1,22 @@
 <div class="container main_container">
     <div class="row filters">
-        <div class="col-md-offset-8 col-md-1 other_filter">
-            <button type="button" class="btn btn-md show_filters"><i class="fa fa-filter"></i></button>
+        <div class="col-md-7 unseated_emp">
+            <div class="emp-list"> Employees 
+              <div class="add_emp">
+                <button type="button" class="btn btn-sm" ng-click="showHideForm()" title="Add New Employee"><i class="fa fa-plus"></i></button>
+                <add-employee></add-employee>
+              </div>
+            </div>
+            <li ng-repeat="employee in employeeList track by $index">
+                <div class="employee" dd-draggable="true" emp-name="{{employee.name}}" data-obj="{{employee}}" data-toggle="popover" data-content="{{employee}}" data-placement="bottom"></div>
+            </li>
+        </div>
+        <div class="col-md-3 name_filter">
+            <input name='name' type="text" class="form-control search-name" ng-model="nameFilter" placeholder="Search by name..." />
+        </div>
+        <div class="col-md-2 other_filter">
+            <button type="button" class="btn btn-md show_filters" ng-click="showHideFilters()" title="Show Or Hide Filters"><i class="fa fa-filter"></i></button>
+            <button type="button" class="btn btn-md btn-danger" ng-click="clearFilters()" title="Clear Applied Side Filters"><i class="fa fa-times"></i></button>
             <div class="hide add_filters">
               <label>
                   <input name='teams' type="checkbox" rel="Teams" />
@@ -25,16 +40,7 @@
             </div>
             </div>
         </div>
-        <div class="col-md-3 name_filter">
-            <input name='name' type="text" class="form-control search-name" ng-model="nameFilter" placeholder="Search..." />
-        </div>
-    </div>
-    <div class="unseated_emp">
-        <h4> Unseated Employees </h4>
-        <li ng-repeat="employee in employeeList track by $index">
-            <div class="employee" dd-draggable="true" emp-name="{{employee.name}}" data-obj="{{employee}}" data-toggle="popover" data-content="{{employee}}" data-placement="bottom"></div>
-        </li>
     </div>
     <emp-table></emp-table>
-    <div id="alert-area"></div>
+    <div class="row" id="alert-area"></div>
 </div>

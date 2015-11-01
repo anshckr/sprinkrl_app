@@ -30,11 +30,13 @@
 }
 
 .main_container {
-  border: 1px solid black
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 .team_area {
-  height: 240px;
+  height: 210px;
   margin: 30px 0px;
 }
 
@@ -42,6 +44,7 @@
   background-color: #D3D3D3;
   height: 140px;
   text-align: center;
+  border: 1px solid white;
 }
 .employee, .employee_cont {
   height: 20px;
@@ -59,10 +62,10 @@ span.title {
 }
 
 .employee_cont {
-  background-color: lightgreen
+  background-color: gainsboro
 }
 .isFilled {
-  background-color: red
+  background-color: black
 }
 
 li {
@@ -71,23 +74,47 @@ li {
   margin: 10px;
 }
 #alert-area {
-  text-align: center;
+  text-align: -webkit-center;
+}
+.alert-message {
+    width: 55%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: grey;
+    color: white;
+    padding-top: 8px;
+    margin-bottom: 5px;
 }
 .searched{
-  background-color: blue !important
+  background-color: deepskyblue !important
 }
 .search-name {
-  width: 305px !important;
+  width: 310px !important;
   margin-top: 10px;
   float: right;
+  position: relative;
+  left: 105px;
 }
-.show_filters{
-  margin-top: 10px
+.other_filter {
+  position: relative;
+  left: 88px;
+}
+
+.other_filter button{
+  margin-top: 10px;
 }
 .add_filters {
+  background-color: darkgray;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.4);
+  color: #fff;
+  font-size: 12px;
+  font-family: 'Helvetica',sans-serif;
+  left: -198px;
+  padding: 7px 10px;
   position: absolute;
-  width: 215px;
-  border: 1px solid black;
+  width: 250px;
+  z-index: 1060;
 }
 .render_filters {
   position: relative;
@@ -99,4 +126,36 @@ li {
 }
 .add_filters label {
   padding: 10px;
+}
+.add_emp {
+  display: inline-block;
+}
+.emp-list {
+  padding: 10px;
+}
+form {
+  position: absolute;
+}
+.black_overlay{
+  background-color: black;
+  z-index:1001;
+  -moz-opacity: 0.8;
+  opacity:.80;
+  filter: alpha(opacity=80);
+}
+
+.white_content {
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  width: 300px;
+  padding: 20px;
+  border: 5px solid orange;
+  background-color: white;
+  z-index:1002;
+  overflow: auto;
+}
+
+.blur_effect {
+  -webkit-filter: blur(5px);
 }
