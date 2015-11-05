@@ -274,6 +274,9 @@ angular.module('myApp.main', ['ngRoute']).config([
         keys_list.push(key);
       });
       FirebaseService.remove(keys_list);
+      var searched_emp = $('.searched');
+      searched_emp.parent().removeClass('isFilled');
+      searched_emp.remove();
     };
   }
 ]);
