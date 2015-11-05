@@ -11,14 +11,16 @@ angular.module('myApp.main', ['ngRoute']).config([
   '$scope',
   '$window',
   '$timeout',
-  'MainService',
-  function($scope, $window, $timeout, MainService) {
+  'FirebaseService',
+  'LoadingService',
+  function($scope, $window, $timeout, FirebaseService, LoadingService) {
+    LoadingService.start_loading();
     // Get the data on a post that has been removed
-    MainService.all().on('child_removed', function(snapshot) {
+    FirebaseService.all().on('child_removed', function(snapshot) {
       var deletedEmployee = snapshot.val();
       console.log('Employee -' + deletedEmployee.name + ' has been removed from the database');
     });
-    MainService.all().on('value', function(snapshot) {
+    FirebaseService.all().on('value', function(snapshot) {
       /* variables */
       $scope.employeeList = snapshot.val();
       $scope.employeeTeams = _.uniq(_.pluck($scope.employeeList, 'team'));
@@ -53,8 +55,12 @@ angular.module('myApp.main', ['ngRoute']).config([
           $scope.highlight();
         }); 
         /* remove loading once employees are loaded */
-        $('#loading').hide();
+        LoadingService.stop_loading();
       }, 0);
+    }, function (errorObject) {
+      /* remove loading once employees are loaded */
+      LoadingService.stop_loading();
+      console.log("The read failed: " + errorObject.code);
     });
     /**
      * [applySideFilters show/hide and applies the checked values in side filters]
@@ -62,12 +68,12 @@ angular.module('myApp.main', ['ngRoute']).config([
      */
     $scope.applySideFilters = function(ele) {
       if (!ele.is(':checked')) {
-        $scope.clearTeamChecks();
+        $scope.clearChecks(ele.attr('name'));
         $('.' + ele.attr('name')).addClass('hide');
       } else {
         $('.' + ele.attr('name')).removeClass('hide');
       }
-      $scope.highlight();
+      $scope.highlight(true);
     };
     /**
      * [showHideFilters function to execute when side filter is clicked]
@@ -76,24 +82,21 @@ angular.module('myApp.main', ['ngRoute']).config([
       $('.add_filters').toggleClass('hide');
     };
     /**
-     * [clearTeamChecks clear teams filter]
+     * [clearChecks clears unchecked filters]
      */
-    $scope.clearTeamChecks = function() {
-      $('.teams').find('input:checked').attr('checked', false);
-      $scope.teamFilter = {};
-    };
-    /**
-     * [clearDesignationChecks clear designations filter]
-     */
-    $scope.clearDesignationChecks = function() {
-      $('.designations').find('input:checked').attr('checked', false);
-      $scope.designationFilter = {};
+    $scope.clearChecks = function(name) {
+      $('.' + name).find('input:checked').attr('checked', false);
+      if (name === 'teams') {
+        $scope.teamFilter = {};
+      } else if (name === 'designations'){
+        $scope.designationFilter = {};
+      }
     };
     /**
      * [add function used to save an employee to the firebase database]
      */
     $scope.add = function() {
-      var save = MainService.all().push().set({
+      var save = FirebaseService.all().push().set({
         name: $scope.name,
         designation: $scope.designation,
         team: $scope.team,
@@ -180,13 +183,16 @@ angular.module('myApp.main', ['ngRoute']).config([
     /**
      * [highlight highlights the employees who pass the match criteria]
      */
-    $scope.highlight = function() {
+    $scope.highlight = function(hideAlertFlag) {
       $('.searched').removeClass('searched');
       $scope.filtered_employees = $scope.filterEmployees();
       $scope.highlightSearched($scope.filtered_employees);
       if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
         $scope.$digest();
       }
+      if (!$scope.filtered_employees.length && !hideAlertFlag) {
+        $scope.newAlert('No Matching Results Found!!');
+      };
     };
     /**
      * [clearFilters removes all the applied fitlers]
@@ -267,7 +273,7 @@ angular.module('myApp.main', ['ngRoute']).config([
         });
         keys_list.push(key);
       });
-      MainService.remove(keys_list);
+      FirebaseService.remove(keys_list);
     };
   }
 ]);

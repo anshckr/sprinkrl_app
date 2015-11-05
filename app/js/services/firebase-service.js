@@ -1,6 +1,6 @@
 'use strict';
 angular.module("myApp")
-.factory('MainService', ["$firebaseObject", "$firebaseArray", function MainServiceFactory($firebaseObject, $firebaseArray) {
+.factory('FirebaseService', ["$firebaseObject", "$firebaseArray", function MainServiceFactory($firebaseObject, $firebaseArray) {
   var ref = new Firebase('https://brilliant-inferno-3983.firebaseio.com');
   var employeesRef = ref.child('employees');
   
