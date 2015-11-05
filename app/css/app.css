@@ -159,3 +159,30 @@ form {
 .blur_effect {
   -webkit-filter: blur(5px);
 }
+
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #AAB2BD;
+    opacity: 0.7;
+    z-index: 1000000000000;
+}
+
+#loading-message {
+    position: fixed;
+    width: 450px;
+    height: 100px;
+    line-height: 100px;
+    background-color: #fff;
+    text-align: center;
+    font-size: 1.5em;
+    left: 50%;
+    top: 45%;
+    margin-left: -200px;
+    margin-top: -50px;
+    border-radius: 10px;
+    z-index: 1000000000000;
+}
