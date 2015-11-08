@@ -12,35 +12,7 @@
                 <div class="employee" dd-draggable="true" emp-name="{{employee.name}}" data-obj="{{employee}}" data-toggle="popover" data-content="{{employee}}" data-placement="bottom"></div>
             </li>
         </div>
-        <div class="col-md-3 name_filter">
-            <input name='name' type="text" class="form-control search-name" ng-model="nameFilter" placeholder="Search by name..." />
-        </div>
-        <div class="col-md-2 other_filter">
-            <button type="button" class="btn btn-md show_filters" ng-click="showHideFilters()" title="Show Or Hide Filters"><i class="fa fa-filter"></i></button>
-            <button type="button" class="btn btn-md btn-danger" ng-click="clearFilters()" title="Clear Applied Side Filters"><i class="fa fa-times"></i></button>
-            <div class="hide add_filters">
-              <label>
-                  <input name='teams' type="checkbox" rel="Teams" />
-                  Teams
-              </label>
-              <label>
-                  <input name='designations' type="checkbox" rel="Designations" />
-                  Designations
-              </label>
-              <div class="render_filters">
-                <div class="teams hide">
-                    <label ng-repeat="i in employeeTeams track by $index">
-                        <input type="checkbox" rel="{{i}}" ng-model="teamFilter[i]" ng-true-value="'{{i}}'" ng-false-value="''"/> {{i}}
-                    </label>
-                </div>
-                <div class="designations hide">
-                    <label ng-repeat="i in employeeDesignations track by $index">
-                        <input type="checkbox" rel="{{i}}" ng-model="designationFilter[i]" ng-true-value="'{{i}}'" ng-false-value="''"/> {{i}}
-                    </label>
-                </div>
-            </div>
-            </div>
-        </div>
+        <add-filters></add-filters>
     </div>
     <emp-table></emp-table>
     <div class="row" id="alert-area"></div>

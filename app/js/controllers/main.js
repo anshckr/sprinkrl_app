@@ -18,7 +18,7 @@ angular.module('myApp.main', ['ngRoute']).config([
     // Get the data on a post that has been removed
     FirebaseService.all().on('child_removed', function(snapshot) {
       var deletedEmployee = snapshot.val();
-      console.log('Employee -' + deletedEmployee.name + ' has been removed from the database');
+      $window.console.log('Employee -' + deletedEmployee.name + ' has been removed from the database');
     });
     FirebaseService.all().on('value', function(snapshot) {
       /* variables */
@@ -46,14 +46,10 @@ angular.module('myApp.main', ['ngRoute']).config([
           popover.setContent();
           popover.$tip.addClass(popover.options.placement);
         });
-        /* events binded to side filters i.e. teams and designations */
-        $('input[name="teams"], input[name="designations"]').on('change', function(e) {
-          $scope.applySideFilters($(e.currentTarget));
-        });
         /* call hightlight if any of the actual filter value is checked */
         $('input.search-name, .teams input, .designations input').on('change', function(e) {
           $scope.highlight();
-        }); 
+        });
         /* remove loading once employees are loaded */
         LoadingService.stop_loading();
       }, 0);
@@ -62,181 +58,6 @@ angular.module('myApp.main', ['ngRoute']).config([
       LoadingService.stop_loading();
       console.log("The read failed: " + errorObject.code);
     });
-    /**
-     * [applySideFilters show/hide and applies the checked values in side filters]
-     * @param  {DOM Element} ele element which was checked
-     */
-    $scope.applySideFilters = function(ele) {
-      if (!ele.is(':checked')) {
-        $scope.clearChecks(ele.attr('name'));
-        $('.' + ele.attr('name')).addClass('hide');
-      } else {
-        $('.' + ele.attr('name')).removeClass('hide');
-      }
-      $scope.highlight(true);
-    };
-    /**
-     * [showHideFilters function to execute when side filter is clicked]
-     */
-    $scope.showHideFilters = function() {
-      $('.add_filters').toggleClass('hide');
-    };
-    /**
-     * [clearChecks clears unchecked filters]
-     */
-    $scope.clearChecks = function(name) {
-      $('.' + name).find('input:checked').attr('checked', false);
-      if (name === 'teams') {
-        $scope.teamFilter = {};
-      } else if (name === 'designations'){
-        $scope.designationFilter = {};
-      }
-    };
-    /**
-     * [add function used to save an employee to the firebase database]
-     */
-    $scope.add = function() {
-      var save = FirebaseService.all().push().set({
-        name: $scope.name,
-        designation: $scope.designation,
-        team: $scope.team,
-        project: $scope.project
-      });
-      /* reset all the details */
-      $scope.name = '';
-      $scope.designation = '';
-      $scope.team = '';
-      $scope.project = '';
-    };
-    /**
-     * [showHideForm used to show/hide the form to add an employee]
-     */
-    $scope.showHideForm = function() {
-      var form_ele = $('form');
-      if (form_ele.hasClass('hide')) {
-        form_ele.addClass('white_content');
-        $('.main_container').addClass('black_overlay');
-      } else {
-        $('.white_content').removeClass('white_content');
-        $('.black_overlay').removeClass('black_overlay');
-      }
-      form_ele.toggleClass('hide');
-    };
-    /**
-     * [searchFilterName used to filter employee based on name]
-     * @param  {Object} employee
-     * @return {Boolean} true/false based on whether employee's name matches the searched string
-     */
-    $scope.searchFilterName = function(employee) {
-      if (!$scope.nameFilter) {
-        return false;
-      }
-      var keyword = new RegExp($scope.nameFilter, 'i');
-      return keyword.test(employee.name);
-    };
-    /**
-     * [searchFilterTeam used to filter employee based on their teams]
-     * @param  {Object} employee
-     * @return {Boolean} true/false based on whether employee's teams matches the checked team
-     */
-    $scope.searchFilterTeam = function(employee) {
-      /* return true if matched else false */
-      if (_.isEmpty($scope.teamFilter)) {
-        return false;
-      }
-      var values = _.values($scope.teamFilter);
-      var all_empty = _.every(values, function(val, index) {
-        return !val;
-      });
-      if (all_empty) {
-        return false;
-      } else {
-        /* returns true if any teams matches employee's team */
-        return _.some(values, function(val, index) {
-          return val == employee.team;
-        });
-      }
-    };
-    /**
-     * [searchFilterDesignation used to filter employee based on their desigations]
-     * @param  {Object} employee
-     * @return {Boolean} true/false based on whether employee's designation matches the checked designation
-     */
-    $scope.searchFilterDesignation = function(employee) {
-      /* return true if matched else false */
-      if (_.isEmpty($scope.designationFilter)) {
-        return false;
-      }
-      var values = _.values($scope.designationFilter);
-      var all_empty = _.every(values, function(val, index) {
-        return !val;
-      });
-      if (all_empty) {
-        return false;
-      } else {
-        /* returns true if any desinations matches employee's designation */
-        return _.some(values, function(val, index) {
-          return val == employee.designation;
-        });
-      }
-    };
-    /**
-     * [highlight highlights the employees who pass the match criteria]
-     */
-    $scope.highlight = function(hideAlertFlag) {
-      $('.searched').removeClass('searched');
-      $scope.filtered_employees = $scope.filterEmployees();
-      $scope.highlightSearched($scope.filtered_employees);
-      if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
-        $scope.$digest();
-      }
-      if (!$scope.filtered_employees.length && !hideAlertFlag) {
-        $scope.newAlert('No Matching Results Found!!');
-      };
-    };
-    /**
-     * [clearFilters removes all the applied fitlers]
-     */
-    $scope.clearFilters = function() {
-      $('.searched').removeClass('searched');
-      $('input:checked').attr('checked', false);
-      $('.teams').addClass('hide');
-      $('.designations').addClass('hide');
-      $scope.nameFilter = '';
-      $scope.teamFilter = {};
-      $scope.designationFilter = {};
-      $scope.filtered_employees = [];
-    };
-    /**
-     * [filterEmployees helper function used to filter employees]
-     * @return {Array} list of employees who passed the search criteria
-     */
-    $scope.filterEmployees = function() {
-      var arr = [];
-      _.each($scope.employeeList, function(employee) {
-        if ($scope.searchFilterName(employee) || $scope.searchFilterTeam(employee) || $scope.searchFilterDesignation(employee)) {
-          arr.push(employee);
-        }
-      });
-      return arr;
-    };
-    /**
-     * [highlightSearched helper function used to highlight the above fetched employees]
-     * @param  {Array} arr list of employees to be hightlighted
-     */
-    $scope.highlightSearched = function(arr) {
-      _.each(arr, function(employee) {
-        $('[emp-name=\'' + employee.name + '\']').addClass('searched');
-      });
-    };
-    /* additional functions to view remaining seated/unseated employees */
-    $scope.seated = [];
-    $scope.showEmployeesLeft = function() {
-      $window.alert($scope.employeeList.length - $scope.seated.length + ' employees left unseated.');
-    };
-    $scope.showEmployeesSeated = function() {
-      $window.alert($scope.seated.length + ' employees seated.');
-    };
     /**
      * [moveToBox used while dragging the employee to some seat]
      * @param  {Object} employee
@@ -261,9 +82,6 @@ angular.module('myApp.main', ['ngRoute']).config([
         $(this).remove();
       });
     };
-    $scope.isFilterOn = function() {
-      return _.isEmpty($scope.filtered_employees) ? false : true;
-    };
     $scope.removeFilteredEmployees = function() {
       var keys_list = [];
       var key;
@@ -277,6 +95,18 @@ angular.module('myApp.main', ['ngRoute']).config([
       var searched_emp = $('.searched');
       searched_emp.parent().removeClass('isFilled');
       searched_emp.remove();
+    };
+
+    /* additional functions to view remaining seated/unseated employees */
+    $scope.seated = [];
+    $scope.showEmployeesLeft = function() {
+      $window.alert($scope.employeeList.length - $scope.seated.length + ' employees left unseated.');
+    };
+    $scope.showEmployeesSeated = function() {
+      $window.alert($scope.seated.length + ' employees seated.');
+    };
+    $scope.isFilterOn = function() {
+      return _.isEmpty($scope.filtered_employees) ? false : true;
     };
   }
 ]);

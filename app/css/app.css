@@ -82,7 +82,7 @@ li {
     border-radius: 5px;
     background-color: grey;
     color: white;
-    padding-top: 8px;
+    padding: 8px 5px 0;
     margin-bottom: 5px;
 }
 .searched{
